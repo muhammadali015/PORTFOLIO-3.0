@@ -50,7 +50,11 @@ All colors MUST be HSL.
     cursor: none;
   }
   
-  a, button {
+  a, button, input, textarea {
     cursor: none;
+  }
+  
+  .custom-cursor {
+    transition: transform 0.15s ease-out;
   }
 }
