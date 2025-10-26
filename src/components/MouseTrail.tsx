@@ -1,45 +1,70 @@
 import { useEffect, useRef } from "react";
 
-const MouseTrail = () => {
+interface MouseTrailProps {
+  containerId: string;
+}
+
+const MouseTrail = ({ containerId }: MouseTrailProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pointsRef = useRef<{ x: number; y: number }[]>([]);
+  const pointsRef = useRef<{ x: number; y: number; timestamp: number }[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = document.getElementById(containerId);
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const cursor = document.querySelector(".custom-cursor") as HTMLElement;
+    let isHovering = false;
 
-    // Set canvas size
+    // Set canvas size to match container
     const updateCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
     };
     updateCanvasSize();
     window.addEventListener("resize", updateCanvasSize);
 
+    const handleMouseEnter = () => {
+      isHovering = true;
+      if (cursor) cursor.style.display = "block";
+    };
+
+    const handleMouseLeave = () => {
+      isHovering = false;
+      if (cursor) cursor.style.display = "none";
+      pointsRef.current = [];
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
+      if (!isHovering) return;
+
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
       // Update cursor position
       if (cursor) {
         cursor.style.left = `${e.clientX}px`;
         cursor.style.top = `${e.clientY}px`;
       }
 
-      pointsRef.current.push({ x: e.clientX, y: e.clientY });
-      
-      // Keep only last 30 points for smoother trail
-      if (pointsRef.current.length > 30) {
-        pointsRef.current.shift();
-      }
+      pointsRef.current.push({ x, y, timestamp: Date.now() });
     };
 
     const animate = () => {
-      // Clear canvas with slight fade effect
-      ctx.fillStyle = "rgba(14, 15, 23, 0.1)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Clear canvas completely
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const currentTime = Date.now();
+      
+      // Remove points older than 1 second
+      pointsRef.current = pointsRef.current.filter(
+        point => currentTime - point.timestamp < 1000
+      );
 
       const points = pointsRef.current;
       if (points.length < 2) {
@@ -68,16 +93,21 @@ const MouseTrail = () => {
         );
       }
 
-      // Style the line with gradient
+      // Create gradient with fade based on age
       const gradient = ctx.createLinearGradient(
         points[0].x,
         points[0].y,
         points[points.length - 1].x,
         points[points.length - 1].y
       );
-      gradient.addColorStop(0, "rgba(168, 85, 247, 0)");
-      gradient.addColorStop(0.5, "rgba(168, 85, 247, 0.5)");
-      gradient.addColorStop(1, "rgba(168, 85, 247, 1)");
+      
+      // Calculate opacity based on point age
+      points.forEach((point, index) => {
+        const age = currentTime - point.timestamp;
+        const opacity = Math.max(0, 1 - (age / 1000));
+        const stop = index / (points.length - 1);
+        gradient.addColorStop(stop, `rgba(168, 85, 247, ${opacity * 0.8})`);
+      });
 
       ctx.strokeStyle = gradient;
       ctx.lineWidth = 2;
@@ -85,32 +115,31 @@ const MouseTrail = () => {
       ctx.lineJoin = "round";
       ctx.stroke();
 
-      // Fade out old points
-      if (points.length > 0) {
-        pointsRef.current = points.slice(-25);
-      }
-
       requestAnimationFrame(animate);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseenter", handleMouseEnter);
+    container.addEventListener("mouseleave", handleMouseLeave);
+    container.addEventListener("mousemove", handleMouseMove);
     animate();
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mouseenter", handleMouseEnter);
+      container.removeEventListener("mouseleave", handleMouseLeave);
+      container.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", updateCanvasSize);
     };
-  }, []);
+  }, [containerId]);
 
   return (
     <>
       <canvas
         ref={canvasRef}
-        className="pointer-events-none fixed inset-0 z-50"
+        className="pointer-events-none absolute inset-0 z-10"
         style={{ mixBlendMode: "screen" }}
       />
       {/* Custom cursor dot */}
-      <div className="custom-cursor pointer-events-none fixed z-50 w-3 h-3 rounded-full bg-primary/80 -translate-x-1/2 -translate-y-1/2" />
+      <div className="custom-cursor pointer-events-none fixed z-50 w-3 h-3 rounded-full bg-primary/80 -translate-x-1/2 -translate-y-1/2" style={{ display: "none" }} />
     </>
   );
 };

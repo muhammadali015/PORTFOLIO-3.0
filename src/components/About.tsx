@@ -1,9 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { Code2 } from "lucide-react";
+import MouseTrail from "./MouseTrail";
 
 const About = () => {
   return (
-    <section id="about" className="py-20 bg-background">
+    <section id="about" className="py-20 bg-background relative">
+      <MouseTrail containerId="about" />
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="animate-slide-up">

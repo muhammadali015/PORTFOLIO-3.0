@@ -47,10 +47,16 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  #about {
     cursor: none;
   }
   
-  a, button, input, textarea {
+  #about a, 
+  #about button, 
+  #about input, 
+  #about textarea {
     cursor: none;
   }
   
