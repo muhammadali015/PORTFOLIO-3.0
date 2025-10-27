@@ -64,12 +64,15 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
 
     const userMessage = input.trim();
     setInput("");
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    
+    // Add user message to UI immediately
+    const userMsg = { role: "user" as const, content: userMessage };
+    setMessages((prev) => [...prev, userMsg]);
     setIsChatLoading(true);
 
     try {
       // Prepare conversation history for the API (including the new user message)
-      const conversationHistory = [...messages, { role: "user" as const, content: userMessage }].map(msg => ({
+      const conversationHistory = [...messages, userMsg].map(msg => ({
         role: msg.role,
         content: msg.content
       }));
