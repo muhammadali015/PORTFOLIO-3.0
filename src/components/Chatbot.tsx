@@ -6,9 +6,8 @@ import { X, Send, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 
-const API_KEY = "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";
-const MODEL = "mistralai/mistral-7b-instruct:free";
-const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+// Use Vercel API route for chatbot to avoid CORS issues
+const API_URL = "/api/chatbot";
 
 interface Message {
   role: "user" | "assistant";
@@ -69,54 +68,19 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
     setIsChatLoading(true);
 
     try {
-      // Prepare conversation history for the API
+      // Prepare conversation history for the API (including the new user message)
       const conversationHistory = [...messages, { role: "user" as const, content: userMessage }].map(msg => ({
         role: msg.role,
         content: msg.content
       }));
-
-      // Add system context about the portfolio
-      const systemContext = `
-      You are the AI assistant of Muhammad Ali, a Software Engineer and AI Automation Engineer.
-      
-      Your role is to assist visitors who want to learn more about Muhammad’s skills, experience, and projects, and to help potential clients understand what he can build for them.
-      
-      When someone asks about his projects, clearly describe a few examples — focusing on AI automation, full-stack web apps, chatbots, and workflow systems — and mention the kinds of tools and technologies he uses.
-      
-      If a visitor seems genuinely interested in working with him or asks about collaboration, politely guide them to contact him via email (e.g., "You can reach Muhammad directly at alich11416181@gmail.com for project discussions or inquiries.").
-      
-      Style Guide:
-      - Keep responses professional, friendly, and confident.
-      - Write in a natural, conversational tone — not too formal or robotic.
-      - Be concise and respectful of the user’s time.
-      - Always highlight Muhammad’s strengths, such as:
-        - Building AI automation systems
-        - Developing full-stack web applications
-        - Creating intelligent bots and APIs
-        - Solving complex software challenges
-      
-      Example Behavior:
-      - If someone says, "What projects have you done?" → List a few example projects with short, strong descriptions.
-      - If someone says, "Can Muhammad build something for me?" → Explain what kind of work he can do and invite them to contact him.
-      - If someone asks for personal details → Politely redirect the conversation to professional topics.
-      
-      Your tone should make the visitor feel confident that Muhammad Ali is a skilled, reliable professional they can trust for AI and software engineering work.
-      `;
       
       const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
-          model: MODEL,
-          messages: [
-            { role: "system", content: systemContext },
-            ...conversationHistory
-          ],
-          temperature: 0.7,
-          max_tokens: 500,
+          messages: conversationHistory,
         }),
       });
 
@@ -129,7 +93,8 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
       const data = await response.json();
       console.log("API Response:", data);
       
-      const botResponse = data.choices[0]?.message?.content || "I apologize, but I'm having trouble processing that request. Could you please rephrase your question?";
+      // Extract the bot response from the OpenRouter API response
+      const botResponse = data?.choices?.[0]?.message?.content || "I apologize, but I'm having trouble processing that request. Could you please rephrase your question?";
       
       setMessages((prev) => [...prev, { role: "assistant", content: botResponse }]);
     } catch (error) {
