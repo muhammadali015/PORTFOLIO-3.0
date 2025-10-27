@@ -5,6 +5,8 @@ const MODEL = "mistralai/mistral-7b-instruct:free";
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('Chatbot API called:', req.method, req.url);
+  
   // Enable CORS headers for all requests
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -12,18 +14,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
+    console.log('Handling OPTIONS request');
     return res.status(200).end();
   }
 
   // Only allow POST for actual requests
   if (req.method !== 'POST') {
+    console.log('Method not allowed:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
+    console.log('Processing POST request');
     const { messages } = req.body;
+    console.log('Received messages:', messages?.length);
 
     if (!messages || !Array.isArray(messages)) {
+      console.error('Invalid messages:', messages);
       return res.status(400).json({ error: 'Messages array is required' });
     }
 

@@ -77,6 +77,9 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
         content: msg.content
       }));
       
+      console.log("Sending request to:", API_URL);
+      console.log("Conversation history:", conversationHistory);
+      
       const response = await fetch(API_URL, {
         method: "POST",
         headers: {
@@ -86,6 +89,9 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
           messages: conversationHistory,
         }),
       });
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
 
       if (!response.ok) {
         const errorText = await response.text();
