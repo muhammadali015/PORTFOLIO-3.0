@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const API_KEY = "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";
+// Use environment variable or fallback to hardcoded key
+const API_KEY = process.env.OPENROUTER_API_KEY || "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";
 const MODEL = "mistralai/mistral-7b-instruct:free";
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
