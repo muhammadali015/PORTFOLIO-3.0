@@ -103,7 +103,15 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
       console.log("API Response:", data);
       
       // Extract the bot response from the OpenRouter API response
-      const botResponse = data?.choices?.[0]?.message?.content || "I apologize, but I'm having trouble processing that request. Could you please rephrase your question?";
+      let botResponse;
+      if (data?.choices?.[0]?.message?.content) {
+        botResponse = data.choices[0].message.content;
+      } else if (data?.error) {
+        botResponse = `Error: ${data.error}`;
+      } else {
+        botResponse = "I apologize, but I'm having trouble processing that request. Could you please rephrase your question?";
+        console.error("Unexpected response format:", data);
+      }
       
       setMessages((prev) => [...prev, { role: "assistant", content: botResponse }]);
     } catch (error) {
