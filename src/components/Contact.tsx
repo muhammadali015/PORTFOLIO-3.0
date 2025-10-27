@@ -2,7 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Mail, MessageSquare } from "lucide-react";
 
-const Contact = () => {
+interface ContactProps {
+  onChatClick?: () => void;
+}
+
+const Contact = ({ onChatClick }: ContactProps) => {
+  const handleEmailClick = () => {
+    window.location.href = "mailto:alich11416181@gmail.com";
+  };
+
   return (
     <section id="contact" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -16,8 +24,8 @@ const Contact = () => {
                 <Mail className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Email Me</h3>
-              <p className="text-sm text-muted-foreground mb-4">ali@example.com</p>
-              <Button variant="outline" className="w-full">
+              <p className="text-sm text-muted-foreground mb-4">alich11416181@gmail.com</p>
+              <Button variant="outline" className="w-full" onClick={handleEmailClick}>
                 Send Email
               </Button>
             </Card>
@@ -28,7 +36,7 @@ const Contact = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2">Ask My Bot</h3>
               <p className="text-sm text-muted-foreground mb-4">Quick questions? Chat with my AI assistant</p>
-              <Button className="w-full">
+              <Button className="w-full" onClick={onChatClick}>
                 Start Chat
               </Button>
             </Card>
