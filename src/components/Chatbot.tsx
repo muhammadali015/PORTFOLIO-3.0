@@ -152,6 +152,7 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.8, y: 20 }}
       className="fixed bottom-6 right-6 w-96 max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-8rem)] z-50 flex flex-col shadow-2xl rounded-lg overflow-hidden border bg-background"
+      style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
     >
       {/* Header */}
       <div className="bg-primary text-primary-foreground p-4 flex items-center justify-between">
@@ -176,15 +177,15 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} w-full`}
             >
               <div
-                className={`flex gap-2 max-w-[80%] ${
+                className={`flex gap-2 max-w-[85%] min-w-0 ${
                   message.role === "user" ? "flex-row-reverse" : ""
                 }`}
               >
                 <div
-                  className={`p-2 rounded-full ${
+                  className={`p-2 rounded-full flex-shrink-0 ${
                     message.role === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground"
@@ -197,19 +198,20 @@ const Chatbot = ({ isOpen: isOpenProp, onClose }: ChatbotProps) => {
                   )}
                 </div>
                 <div
-                  className={`rounded-lg px-3 py-2 ${
+                  className={`rounded-lg px-3 py-2 min-w-0 ${
                     message.role === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-card border"
                   }`}
                 >
-                  <div className="text-sm prose prose-sm max-w-none prose-headings:text-sm prose-p:my-2 prose-strong:text-foreground prose-strong:font-semibold break-words overflow-wrap-anywhere prose-a:break-all prose-pre:break-words prose-code:break-all">
+                  <div className="text-sm prose prose-sm max-w-none prose-headings:text-sm prose-p:my-2 prose-strong:text-foreground prose-strong:font-semibold break-words break-all overflow-wrap-anywhere word-break-break-word prose-a:break-all prose-pre:break-words prose-code:break-all whitespace-pre-wrap">
                     <ReactMarkdown 
                       components={{
-                        p: ({children}) => <p className="break-words">{children}</p>,
-                        strong: ({children}) => <strong className="break-words">{children}</strong>,
+                        p: ({children}) => <p className="break-words break-all whitespace-pre-wrap">{children}</p>,
+                        strong: ({children}) => <strong className="break-words break-all">{children}</strong>,
                         a: ({href, children}) => <a href={href} className="break-all">{children}</a>,
-                        code: ({children}) => <code className="break-all">{children}</code>,
+                        code: ({children}) => <code className="break-all whitespace-pre-wrap">{children}</code>,
+                        div: ({children}) => <div className="break-words break-all whitespace-pre-wrap">{children}</div>,
                       }}
                     >
                       {message.content}
