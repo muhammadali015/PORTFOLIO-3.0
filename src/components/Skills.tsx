@@ -103,13 +103,13 @@ const SkillBadge = ({ item, index, colorClass }) => (
         box-shadow: 0 0 25px var(--tw-color-${colorClass}-500, #3b82f6);
       }
     `}</style>
-    
+
     <img
       src={item.icon}
       alt={item.name}
       className="w-16 h-16 mb-2 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover/icon:scale-110"
     />
-    
+
     <span className="text-sm font-semibold text-white/80 text-center truncate w-full px-1">
       {item.name}
     </span>
@@ -126,32 +126,32 @@ const SkillBadge = ({ item, index, colorClass }) => (
 export default function Skills() {
   return (
     <section id="skills" className="py-24 bg-gray-900 text-white relative overflow-hidden">
-      
+
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-color-secondary/10)_0%,_transparent_50%)]"></div>
 
       <div className="container mx-auto px-6 relative z-10">
-        
+
         {/* The large background heading (Half-Hidden Effect) */}
         <div className="relative overflow-hidden mb-20">
-            <h1 
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+          <h1
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
                            text-9xl md:text-[15rem] lg:text-[20rem] font-extrabold 
                            text-white/5 opacity-5 pointer-events-none whitespace-nowrap"
-            >
-                GRAPH
-            </h1>
+          >
+            GRAPH
+          </h1>
 
-            {/* Main Foreground Heading */}
-            <h2 className="text-5xl font-extrabold text-center tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-white relative z-10">
-                <motion.span 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="inline-block"
-                >
-                    Visualized Tech Stack
-                </motion.span>
-            </h2>
+          {/* Main Foreground Heading */}
+          <h2 className="text-5xl font-extrabold text-center tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-white relative z-10">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="inline-block"
+            >
+              Visualized Tech Stack
+            </motion.span>
+          </h2>
         </div>
 
         {/* The Main Container (Max Web Width) */}
@@ -164,52 +164,52 @@ export default function Skills() {
         >
           {/* Main Card */}
           <Card className="p-8 md:p-16 bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-3xl shadow-2xl">
-            
+
             {/* CORE TECHNOLOGY NODE */}
             <div className="flex justify-center mb-16">
-                <motion.div
-                    className="relative z-10 px-8 py-4 rounded-full font-extrabold text-lg tracking-widest 
+              <motion.div
+                className="relative z-10 px-8 py-4 rounded-full font-extrabold text-lg tracking-widest 
                                 bg-primary/90 text-white shadow-xl shadow-primary/40 
                                 border-4 border-primary/50 ring-4 ring-primary/20 animate-pulse-slow"
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 100, delay: 0.8 }}
-                >
-                    <span className="text-xl">CORE COMPETENCIES</span>
-                </motion.div>
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 100, delay: 0.8 }}
+              >
+                <span className="text-xl">CORE COMPETENCIES</span>
+              </motion.div>
             </div>
-            
+
             {/* RADIAL GRAPH LAYOUT */}
             <div className="relative flex flex-wrap justify-center gap-12 sm:gap-16 lg:gap-20">
-                
-                {skillsByCategory.map((group, groupIndex) => (
-                    <motion.div
-                        key={group.category}
-                        className="relative flex flex-col items-center group/category p-4"
-                        initial={{ opacity: 0, rotateZ: (groupIndex % 2 === 0 ? -10 : 10) }}
-                        whileInView={{ opacity: 1, rotateZ: 0 }}
-                        transition={{ delay: 1.2 + groupIndex * 0.2 }}
-                    >
-                        {/* CATEGORY NODE (THE NAME IN CENTER) */}
-                        <div 
-                          className={`relative z-10 mb-6 px-4 py-2 rounded-full font-bold uppercase text-sm tracking-widest 
+
+              {skillsByCategory.map((group, groupIndex) => (
+                <motion.div
+                  key={group.category}
+                  className="relative flex flex-col items-center group/category p-4"
+                  initial={{ opacity: 0, rotateZ: (groupIndex % 2 === 0 ? -10 : 10) }}
+                  whileInView={{ opacity: 1, rotateZ: 0 }}
+                  transition={{ delay: 0.2 + groupIndex * 0.1 }}
+                >
+                  {/* CATEGORY NODE (THE NAME IN CENTER) */}
+                  <div
+                    className={`relative z-10 mb-6 px-4 py-2 rounded-full font-bold uppercase text-sm tracking-widest 
                                       bg-${group.color}-600/90 text-white shadow-lg shadow-${group.color}-500/30 
                                       border-2 border-${group.color}-300/80 transition-all duration-300 group-hover/category:shadow-xl group-hover/category:scale-105`}
-                        >
-                            {group.category}
-                        </div>
-                        
-                        {/* VISUAL CONNECTOR (LINE FROM CATEGORY NODE TO SKILLS) */}
-                        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 w-0.5 h-1/2 bg-${group.color}-500/50 -mt-10`}></div>
-                        
-                        {/* SKILL ITEMS - Laid out in a tighter flex row */}
-                        <div className="flex flex-wrap justify-center gap-4 mt-2">
-                            {group.items.map((item, i) => (
-                                <SkillBadge key={item.name} item={item} index={i} colorClass={group.color} />
-                            ))}
-                        </div>
-                    </motion.div>
-                ))}
+                  >
+                    {group.category}
+                  </div>
+
+                  {/* VISUAL CONNECTOR (LINE FROM CATEGORY NODE TO SKILLS) */}
+                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 w-0.5 h-1/2 bg-${group.color}-500/50 -mt-10`}></div>
+
+                  {/* SKILL ITEMS - Laid out in a tighter flex row */}
+                  <div className="flex flex-wrap justify-center gap-4 mt-2">
+                    {group.items.map((item, i) => (
+                      <SkillBadge key={item.name} item={item} index={i} colorClass={group.color} />
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </Card>
         </motion.div>

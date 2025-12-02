@@ -1,0 +1,23 @@
+{
+  "name": "Muhammad Ali - Portfolio",
+  "short_name": "Muhammad Ali",
+  "description": "Software Engineer & AI Automation Engineer Portfolio",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "theme_color": "#3b82f6",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+}
+

@@ -1,9 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Use environment variable or fallback to hardcoded key
-const API_KEY = process.env.OPENROUTER_API_KEY || "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";
-const MODEL = "mistralai/mistral-7b-instruct:free";
+// API Configuration - MUST use environment variable in production
+const API_KEY = process.env.OPENROUTER_API_KEY;
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const MODEL = "mistralai/mistral-7b-instruct:free";
+
+
+
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log('Chatbot API called:', req.method, req.url);
@@ -23,6 +26,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     console.log('Method not allowed:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Validate API key is present
+  if (!API_KEY) {
+    console.error('OPENROUTER_API_KEY is not set in environment variables');
+    return res.status(500).json({ 
+      error: 'Server configuration error: API key not configured. Please contact the administrator.' 
+    });
   }
 
   try {

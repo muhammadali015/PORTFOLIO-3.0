@@ -6,8 +6,10 @@ import { X, Send, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 
-// Use Vercel API route for chatbot to avoid CORS issues
-const API_URL = "/api/chatbot";
+// Use local chatbot server for development, Vercel API route for production
+const API_URL = typeof window !== 'undefined' && window.location && window.location.hostname.includes('localhost')
+  ? 'http://localhost:3001/api/chatbot' // Use local chatbot server
+  : '/api/chatbot';
 
 interface Message {
   role: "user" | "assistant";

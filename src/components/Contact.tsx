@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Mail, MessageSquare } from "lucide-react";
+import { CONTACT_EMAIL } from "@/lib/constants";
 
 interface ContactProps {
   onChatClick?: () => void;
@@ -8,7 +9,7 @@ interface ContactProps {
 
 const Contact = ({ onChatClick }: ContactProps) => {
   const handleEmailClick = () => {
-    window.location.href = "mailto:alich11416181@gmail.com";
+    window.location.href = `mailto:${CONTACT_EMAIL}`;
   };
 
   return (
@@ -24,7 +25,7 @@ const Contact = ({ onChatClick }: ContactProps) => {
                 <Mail className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Email Me</h3>
-              <p className="text-sm text-muted-foreground mb-4">alich11416181@gmail.com</p>
+              <p className="text-sm text-muted-foreground mb-4">{CONTACT_EMAIL}</p>
               <Button variant="outline" className="w-full" onClick={handleEmailClick}>
                 Send Email
               </Button>
