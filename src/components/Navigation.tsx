@@ -22,9 +22,9 @@ const Navigation = () => {
             <button onClick={() => scrollToSection("projects")} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Projects
             </button>
-            <button onClick={() => scrollToSection("certificates")} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            {/* <button onClick={() => scrollToSection("certificates")} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Certificates
-            </button>
+            </button> */} {/* Temporarily commented out */}
             <button onClick={() => scrollToSection("contact")} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Contact me
             </button>
