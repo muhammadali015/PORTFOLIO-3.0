@@ -54,7 +54,7 @@ const projectData = [
     techStack: ["React", "Node", "Express","TypeScript","grok API"],
     previewImage: aliPortfolioImage,
     gradient: "from-orange-600 via-red-500 to-pink-500",
-      link: "https://ali-portfolio.vercel.app/",
+      link: "https://muhammadali15.vercel.app/",
     github: "https://github.com/muhammadali015/PORTFOLIO-3.0",
     id: "ali-portfolio",
   },
